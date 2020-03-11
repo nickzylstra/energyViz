@@ -86,9 +86,9 @@ function calculateEnergyPerCapita(data) {
 }
 
 function removeIncompleteDataSets(data) {
-  Object.entries(data.countries).forEach((c) => {
-    if (c[1].energyPerCapitas.count < 10) {
-      delete data.countries[c[0]];
+  Object.entries(data.countries).forEach(([name, stats]) => {
+    if (stats.energyPerCapitas.count < 10) {
+      delete data.countries[name];
     }
   });
 }
