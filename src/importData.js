@@ -1,7 +1,7 @@
 import populationData from './data/populations.json'
 import energyData from './data/energy.json'
 
-const exclusions = ['ARB','CEB','CSS','EAP','EAR','EAS','ECA','ECS','ECU','EMU', 'EUU', 'FCS', 'HIC', 'HITZ', 'HPC', 'IBD', 'IBT', 'IDA', 'IDB','IDX','LAC','LCN','LIC','LDC','LMC','LMY','LTE','MEA','MIC','MNA','NAC','OED','OSS','PRE','PSS','PST','REU','SAS','SSA','SSF','SST','TEA','TEC','TLA','TMN','TSA','TSS','UMC','WLD'];
+const exclusions = ['ARB','CEB','CSS','EAP','EAR','EAS','ECA','ECS','ECU','EMU', 'EUU', 'FCS', 'HIC', 'HITZ', 'HPC', 'IBD', 'IBT', 'IDA', 'IDB','IDX','LAC','LCN','LIC','LDC','LMC','LMY','LTE','MEA','MIC','MNA','NAC','OED','OSS','PRE','PSS','PST','REU','SAS','SSA','SSF','SST','TEA','TEC','TLA','TMN','TSA','TSS','UMC','WLD', 'ERI'];
 
 class Country {
   constructor(name) {
@@ -77,7 +77,7 @@ function calculateEnergyPerCapita(data) {
       const energy = country.energyConsumptions[year];
       if (!population || !energy) return;
       const kWHperBkWH = 1000000000;
-      const energyPerCapita = energy * kWHperBkWH / population;
+      const energyPerCapita = Math.round(energy * kWHperBkWH / population);
 
       country.energyPerCapitas[year] = energyPerCapita;
       country.energyPerCapitas.count += 1;
