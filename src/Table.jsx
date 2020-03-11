@@ -6,9 +6,9 @@ const Table = ({ data }) => (
       <tr>
         <th>code</th>
         <th>name</th>
-        <th>pop</th>
-        <th>energy</th>
-        <th>ePC</th>
+        <th>popCount</th>
+        <th>energyCount</th>
+        <th>ePCCount</th>
       </tr>
     </thead>
     <tbody>
