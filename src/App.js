@@ -6,17 +6,19 @@ import data from './importData';
 
 const width = 600;
 const year = '2016';
-function scalePop(year) {
+function makeStatScaler(year, stat) {
   return d3.scaleLinear()
-    .domain([0, d3.max(Object.entries(data.countries), ([name, { populations }]) => populations[year])])
+    .domain([0, d3.max(Object.entries(data.countries), ([code, stats]) => stats[stat][year])])
     .range([0, width]);
-} 
+}
 
 
 function App() {
+  const stat = 'populations';
+
   useEffect(() => {
     const viz = d3.select('#viz');
-    const vizData = Object.entries(data.countries).sort(([a, aStats], [b, bStats]) => bStats.populations[year] - aStats.populations[year]);
+    const vizData = Object.entries(data.countries).sort(([a, aStats], [b, bStats]) => bStats[stat][year] - aStats[stat][year]);
     viz.selectAll('div').data(vizData).join('div')
       .style('background', 'steelblue')
       .style('border', '1px solid white')
@@ -24,8 +26,8 @@ function App() {
       .style('color', 'black')
       .style('text-align', 'right')
       .style('padding', '3px')
-      .style('width', ([name, stats]) => `${scalePop(year)(stats.populations[year])}px`)
-      .text(([name, stats]) => stats.populations[year]);
+      .style('width', ([code, stats]) => `${makeStatScaler(year, stat)(stats[stat][year])}px`)
+      .text(([code, stats]) => `${stats.name}: ${stats[stat][year]}`);
 
     return () => {
     };
