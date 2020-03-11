@@ -35,7 +35,6 @@ function processPopulationData(input, output = {}) {
         const population = country[key];
 
         if (!output.years[year]) output.years[year] = new Year();
-        output.years[year].populationMax = Math.max(population, output.years[year].populationMax);
 
         output.countries[code].populations[year] = population;
         output.countries[code].populations.count += 1;
@@ -56,11 +55,10 @@ function processEnergyData(input, output = {}) {
 
     country.data.forEach((yearData) => {
       const { date, value } = yearData;
-      if (value === '--') return;
+      if (typeof value !== 'number') return;
       const year = (new Date(date)).getFullYear();
 
       if (!output.years[year]) output.years[year] = new Year();
-      output.years[year].energyConsumptionMax = Math.max(value, output.years[year].energyConsumptionMax);
       
       output.countries[code].energyConsumptions[year] =  value;
       output.countries[code].energyConsumptions.count += 1;
@@ -80,6 +78,7 @@ function calculateEnergyPerCapita(data) {
       if (!population || !energy) return;
       const kWHperBkWH = 1000000000;
       const energyPerCapita = energy * kWHperBkWH / population;
+
       country.energyPerCapitas[year] = energyPerCapita;
       country.energyPerCapitas.count += 1;
     });
@@ -94,6 +93,16 @@ function removeIncompleteDataSets(data) {
   });
 }
 
+function calculateMaxes(data) {
+  Object.entries(data.years).forEach(([year, stats]) => {
+    Object.entries(data.countries).forEach(([c, { populations, energyConsumptions, energyPerCapitas }]) => {
+      stats.populationMax = Math.max(populations[year] || 0, stats.populationMax);
+      stats.energyConsumptionMax = Math.max(energyConsumptions[year] || 0, stats.energyConsumptionMax);
+      stats.energyPerCapitaMax = Math.max(energyPerCapitas[year] || 0, stats.energyPerCapitaMax);
+    })
+  });
+}
+
 const data = {
   years: {},
   countries: {},
@@ -102,5 +111,6 @@ processPopulationData(populationData, data);
 processEnergyData(energyData, data);
 calculateEnergyPerCapita(data);
 removeIncompleteDataSets(data);
+calculateMaxes(data);
 
 export default data;
