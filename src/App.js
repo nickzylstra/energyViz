@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import * as d3 from 'd3';
 import './App.css';
+import Table from './Table';
 import data from './importData';
 
 const width = 600;
@@ -26,35 +27,7 @@ function App() {
   return (
     <div className="App">
       <div id='viz'>
-        <table>
-          <thead>
-            <tr>
-              <th>code</th>
-              <th>name</th>
-              <th>pop</th>
-              <th>energy</th>
-              <th>ePC</th>
-            </tr>
-          </thead>
-          <tbody>
-            {Object.entries(data.countries).sort().map((country) => {
-              const [code, stats] = country;
-              const { name, energyPerCapitas, populations, energyConsumptions } = stats;
-              const ePCCount = energyPerCapitas.count;
-              const popCount = populations.count;
-              const energyCount = energyConsumptions.count;
-              
-              return (
-                <tr key={code}>
-                  <td>{code}</td>
-                  <td>{name}</td>
-                  <td>{popCount}</td>
-                  <td>{energyCount}</td>
-                  <td>{ePCCount}</td>
-                </tr>);
-            })}
-          </tbody>
-        </table>
+        <Table data={data} />
         {/* {JSON.stringify(data)} */}
       </div>
     </div>
