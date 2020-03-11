@@ -77,6 +77,7 @@ function calculateEnergyPerCapita(data) {
     Object.keys(data.years).forEach((year) => {
       const population = country.populations[year];
       const energy = country.energyConsumptions[year];
+      if (!population || !energy) return;
       const kWHperBkWH = 1000000000;
       const energyPerCapita = energy * kWHperBkWH / population;
       country.energyPerCapitas[year] = energyPerCapita;
@@ -86,7 +87,11 @@ function calculateEnergyPerCapita(data) {
 }
 
 function removeIncompleteDataSets(data) {
-  // data.countries = data.countries.filter((c) => );
+  Object.entries(data.countries).forEach((c) => {
+    if (c[1].energyPerCapitas.count < 10) {
+      delete data.countries[c[0]];
+    }
+  });
 }
 
 const data = {
